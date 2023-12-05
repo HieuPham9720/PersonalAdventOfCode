@@ -1,24 +1,23 @@
+import numpy as np
+
 with open("day2_input.txt", "r") as file:
     sum = 0
-    restraint = {
-        "red": 12,
-        "green": 13,
-        "blue": 14,
-    }
     for index, line in enumerate(file):
-        # String manipulation for each clue in each game
-        # if clue exceeds 12 red, 13 green or 14 blue then skip
         line = line.rstrip()
         colon_index = line.index(":")
         grabs = line[colon_index + 2:].split("; ")
-        valid = True
+        max_color = {
+            "red": 0,
+            "green": 0,
+            "blue": 0,
+        }  
         for grab in grabs:
             clues = grab.split(", ")
             for clue in clues:
                 number, color = clue.split(" ")
-                if restraint[color] < int(number):
-                    valid = False
-                    break
-        if valid:
-            sum += (index + 1)
+                max_color[color] = max(max_color[color], int(number))
+        product = 1
+        for value in max_color.values():
+            product *= value
+        sum += product
     print(sum)
